@@ -1,0 +1,216 @@
+<html>
+  <head>
+    <title>Evaluating Teams</title>
+    <!-- <link rel="stylesheet" href="phone.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    <style>
+
+      #idHeader {
+        background-color: #05BD43;
+        border-bottom-style:solid;
+        border-bottom-color:black;
+      }
+
+      .buttonTabs {
+        width:100%;
+        font-size:20px;
+        background-color: #05BD43;
+        border-style:none;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="header" id="idHeader">
+
+      <div class="row">
+        <div class="col-md-3 mt-2">
+          <h1> Evaluate Teams </h1>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card buttonTabs">
+            <div class="card-header buttonTabs" id="headingOne">
+              <button class="btn buttonTabs" style="border-style:solid;border-color:black" id="idFindBestTeamsTab" data-toggle="collapse"
+                data-target="#idFindBestTeamsBox" aria-expanded="false" aria-controls="idFindBestTeamsBox"> Rank Teams </button>
+            </div>
+
+            <div class="collapse multi-collapse" id="idFindBestTeamsBox" aria-labelledby="headingOne">
+              <div class="card-body">
+                <ul class="list-group" style="width:50%;font-size:15px">
+                  <li class="list-group-item buttonTabs" style="border-color:black;border-style:solid"><button id="idFilter2014" class="btn buttonTabs filterButtons" href="#"> 2014 </button> </li>
+                  <li class="list-group-item buttonTabs" style="border-color:black;border-style:solid"><button id="idFilter2015" class="btn buttonTabs filterButtons" href="#"> 2015 </button> </li>
+                  <li class="list-group-item buttonTabs" style="border-color:black;border-style:solid"><button id="idFilter2016" class="btn buttonTabs filterButtons" href="#"> 2016 </button> </li>
+                </ul>
+                <!-- <button class="btn buttonTabs align-self-center" id="idFilterTeamsButton"> Filter Teams</button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card buttonTabs">
+            <div class="card-header buttonTabs" id="headingTwo">
+              <button class="btn buttonTabs" style="border-style:solid;border-color:black" id="idAboutTab"> About</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card buttonTabs">
+              <div class="card-header buttonTabs" id="headingThree">
+                <button class="btn buttonTabs" style="border-style:solid;border-color:black" id="idSearchForTeamTab" data-toggle="collapse"
+                  data-target="#idSearchTeamBox" aria-expanded="false" aria-controls="idSearchTeamBox"> Search For Team </button>
+              </div>
+
+              <div class="collapse" id="idSearchTeamBox" aria-labelledby="headingThree">
+                <div class="card-body">
+                  <form action="localhost:5000/player" method = "GET" id="idForm">
+                    <div class="row">
+                      <div class="col-md-8">
+                        <input class="form-control" id="idTeamName" type="text" name="Name" placeholder="Team Name" />
+                      </div>
+                      <div class="col-md-3">
+                        <input class="btn" type = "submit" value = "submit" id="idSubmitButton" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <br />
+
+    <div id="idBody" style="text-align:center">
+    </div>
+
+    <div class="body container-fluid col-md-10">
+
+      <table class="table table-striped" id="idTeamTable">
+        <thead>
+          <tr>
+            <th scope="col"> Team ID </th>
+            <th scope="col"> Team Name </th>
+            <th scope="col"> Park Factor </th>
+            <th scope="col"> Score Adjusted </th>
+            <th scope="col"> OBP Adjusted </th>
+            <th scope="col"> SLG Adjusted </th>
+            <th scope="col"> Super Score </th>
+          </tr>
+        </thead>
+        <tbody id="idTeamBody">
+        </tbody>
+      </table>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+  </body>
+  <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/transfer.js') }}"></script> -->
+  <script type="text/javascript">
+
+    $(document).ready(function() {
+    });
+
+    $('#idAboutTab').click(function() {
+      $('#idBody').append('<p> The About tab is still being worked on, but it will describe \
+          how we calculated each column and then how we got the super score. But for now, our \
+          write up we turned in last week gives a pretty good idea on how we calculated it. \
+          Basically, whoever had the highest super score was the best overall hitting team for \
+          that year. </p>')
+    });
+
+    $('.filterButtons').click(function() {
+      // $('#idFilterTeamsBox').show();
+      // $('#idSearchTeamBox').hide();
+      var yearID = this.id;
+
+      $('#idFindBestTeamsBox').collapse('hide');
+
+      $.ajax({
+        type: 'get',
+        url: '/teams',
+        data: {
+          "yearID": yearID,
+        },
+        dataType: 'json',
+        success: function(data) {
+          $('#idTeamBody').html("");
+          $('#idBody').html('');
+          $('#idBody').append('<h3> ' + yearID.substr(-4) + '</h3>');
+
+          $.each(data, function(index, value) {
+              $('#idTeamBody').append('<tr> \
+                  <td> ' + value.teamID + '</td> \
+                  <td> ' + value.teamName + '</td> \
+                  <td> ' + value.park_factor.toFixed(3) + '</td> \
+                  <td> ' + value.score_adjusted.toFixed(3) + '</td> \
+                  <td> ' + value.OBP_adjusted.toFixed(3) + '</td> \
+                  <td> ' + value.SLG_adjusted.toFixed(3) + '</td> \
+                  <td> ' + value.Super_Score.toFixed(3) + '</td> \
+                </tr>');
+          });
+        },
+        error: function(request, status, error) {
+          $("#idBody").html(error);
+        }
+      });
+
+    });
+
+    $('#idForm').on('submit', function(e) {
+
+        $('#idSearchTeamBox').collapse('hide');
+
+
+
+        $.ajax({
+          type: 'get',
+          url: '/search',
+          data: {
+            "teamName": $('#idTeamName').val(),
+          },
+          dataType: 'json',
+          success: function(data) {
+            $('#idTeamName').val("");
+            $('#idTeamBody').html("");
+            if (data == '') {
+              $.alert({
+                title: 'Error',
+                content: 'Please enter a team name',
+              });
+            }
+            else {
+              $('#idBody').html('');
+              $('#idBody').append('<h3> 2016 </h3>');
+              $.each(data, function(index, value) {
+                  $('#idTeamBody').append('<tr> \
+                      <td> ' + value.teamID + '</td> \
+                      <td> ' + value.teamName + '</td> \
+                      <td> ' + value.park_factor.toFixed(3) + '</td> \
+                      <td> ' + value.score_adjusted.toFixed(3) + '</td> \
+                      <td> ' + value.OBP_adjusted.toFixed(3) + '</td> \
+                      <td> ' + value.SLG_adjusted.toFixed(3) + '</td> \
+                      <td> ' + value.Super_Score.toFixed(3) + '</td> \
+                    </tr>');
+              });
+            }
+          },
+          error: function(request, status, error) {
+            $("#idBody").html(error);
+          }
+        });
+    });
+  </script>
+</html>
