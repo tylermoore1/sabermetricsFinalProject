@@ -1,3 +1,5 @@
 # sabermetricsFinalProject
 
-When writing write up, make sure to explain the file structure so Rhonda can find all of the files she needs to
+We had to include all of these files and dependencies so that it can run on the gcloud server we connected it to. However, there are only two files that have all of our code in them. The first one is main.py that contains all of our backend code, which includes us creating the dataframes to rank the teams and connecting it to the front end so that we can send data back and forth. Also, if you are looking for our jupyter notebook that also shows how we ranked the teams, that is uploaded on github as well (RankTeams.ipynb). The other file is index.html and can be found in the templates folder. This contains all of the front end code (including the jquery functionality) in order to load the data and present it on the website. 
+
+Our website URL: https://teamevaluation.appspot.com/
