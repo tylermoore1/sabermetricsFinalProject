@@ -5,3 +5,5 @@ We had to include all of these files and dependencies so that it can run on the 
 We also have our explanation of our statistic in the static folder in case you would like to read over our description. This pdf is also uploaded on the website if you choose to read it that way. 
 
 Our website URL: https://teamevaluation.appspot.com/
+
+Video demo URL: https://vimeo.com/333561624
