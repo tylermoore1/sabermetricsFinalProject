@@ -88,12 +88,11 @@
     </div>
 
     <br />
+
+    <div class="container-fluid col-md-12" id="idAboutPage" style="text-align:center">
+    </div>
     <div class="container-fluid col-md-12" id="idEntirePage">
       <div id="idBody" style="text-align:center">
-        <script>
-            var graphs = {{plot | safe}};
-            Plotly.plot('idBody',graphs,{});
-        </script>
       </div>
 
       <div class="body container-fluid col-md-10">
@@ -139,21 +138,25 @@
     var teamName = '';
 
     $(document).ready(function() {
+      $('#idAboutPage').hide();
+      $('#idEntirePage').show();
     });
 
     $('#idAboutTab').click(function() {
-      $('#idBody').append('<p> The About tab is still being worked on, but it will describe \
-          how we calculated each column and then how we got the super score. But for now, our \
-          write up we turned in last week gives a pretty good idea on how we calculated it. \
-          Basically, whoever had the highest super score was the best overall hitting team for \
-          that year. </p>')
+      $('#idAboutPage').show();
+      $('#idEntirePage').hide();
+
+      $('#idAboutPage').html('');
+      $('#idAboutPage').append('<iframe height="100%" width="80%" src="{{ url_for('static', filename='evaluation.pdf', _external=True) }}"></iframe>')
     });
 
     $('.filterButtons').click(function() {
+      $('#idAboutPage').hide();
+      $('#idEntirePage').show();
       //need to get rid of previous graph so they don't overlap each other
       $('#idButtonSection').html('');
       $('#idGraphSection').html('');
-      
+
       var yearID = this.id;
 
       $('#idFindBestTeamsBox').collapse('hide');
@@ -190,6 +193,8 @@
     });
 
     $('#idForm').on('submit', function(e) {
+        $('#idAboutPage').hide();
+        $('#idEntirePage').show();
         //need to get rid of previous graph so they don't overlap each other
         $('#idButtonSection').html('');
         $('#idGraphSection').html('');
@@ -212,7 +217,7 @@
             if (data == '') {
               $.alert({
                 title: 'Error',
-                content: 'Please enter a team name',
+                content: 'Please enter a correct team name',
               });
             }
             else {
