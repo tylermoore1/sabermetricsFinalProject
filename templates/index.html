@@ -147,8 +147,10 @@
       $('#idEntirePage').hide();
 
       $('#idAboutPage').html('');
-      $('#idAboutPage').append('<p> The link to get to our video demo can be found here: <a href="https://vimeo.com/333561624"> Video Demo </a>')
-      $('#idAboutPage').append('<iframe height="100%" width="80%" src="{{ url_for('static', filename='evaluation.pdf', _external=True) }}"></iframe>')
+      $('#idAboutPage').append('<p> The link to get to our video demo can be found here: <a href="https://vimeo.com/333561624"> Video Demo </a> <br />')
+      // $('#idAboutPage').append('<iframe height="100%" width="80%" src="{{ url_for('static', filename='evaluation.pdf', _external=True) }}"></iframe>')
+      $('#idAboutPage').append('<p> The link to get to our write up: <a href="https://github.com/tylermoore1/sabermetricsFinalProject/blob/master/static/evaluation.pdf"> Write Up </a> </p>');
+
     });
 
     $('.filterButtons').click(function() {
