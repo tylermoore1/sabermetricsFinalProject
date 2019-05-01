@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify, url_for
 import json
 
+import plotly
+import plotly.graph_objs as go
+
 import pandas as pd
 from pybaseball.lahman import *
 
@@ -156,12 +159,80 @@ def searchTeam(teamName):
 
     return listOfTeams
 
+def create_plot(teamName):
+
+    teamName = teamName.lower()
+    teamName = teamName.title()
+
+    sal = pd.read_csv("datasets/Salaries.csv")
+
+    yearID = 2
+    mergedData = getAllTeamsInfo(yearID)
+
+    sal_year=[2014,2015,2016]#this uses the same year index as we used to change the year above
+    sal_name=['team_salary_14','team_salary_15','team_salary_16']#this uses the same year index as we used to change the year above
+    salForSpecificYear = sal.loc[sal['yearID'] == sal_year[yearID]].copy()
+    salariesForEachTeam = sal.groupby('teamID')['salary'].sum().reset_index(name=sal_name[yearID])
+    salariesForEachTeam['home_team']=salariesForEachTeam['teamID']
+    mergedData = pd.merge(mergedData, salariesForEachTeam[['home_team',sal_name[yearID]]],on=['home_team'],how='outer')#merged salary data to the big dataset
+    mergedData=mergedData.sort_values(by=['Super_Score'],ascending=False).copy()
+
+    individualTeamData = mergedData.loc[(mergedData['name'] == teamName)]
+
+    data = [
+        go.Scatter(
+            x = mergedData[sal_name[yearID]], # assign x as the dataframe column 'x'
+            y = mergedData['Super_Score'],
+            mode = 'markers',
+            marker = dict(
+                color = 'blue'
+            ),
+            name = 'The other 29 teams'
+        ),
+        go.Scatter(
+            x = individualTeamData[sal_name[yearID]],
+            y = individualTeamData['Super_Score'],
+            mode = 'markers',
+            marker = dict(
+                color = 'red'
+            ),
+            name = teamName
+        )
+    ]
+    layout = go.Layout(
+        autosize = False,
+        width = 450,
+        height = 400,
+        paper_bgcolor = "rgba(0,0,0,0)",
+        title = 'Team Salaries vs Their Super Score',
+        xaxis = dict(
+            title = 'Team Salary'
+        ),
+        yaxis = dict(
+            title = 'Team Super Score'
+        )
+    )
+    fig = go.Figure(data=data, layout=layout)
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON
+
 
 #this is for the page to load for the first time
 @app.route('/', methods = ['GET'])
 def evaluateteams():
     #result = request.form.get('Name')
+
     return render_template('index.html')
+    #return render_template('index.html')
+
+@app.route('/graph', methods=['GET'])
+def change_features():
+
+    teamName = request.args.get('teamName')
+    graphJSON = create_plot(teamName)
+
+    return graphJSON
 
 #this is to load a certain teams data to show on webpage
 @app.route('/search', methods = ['GET'])

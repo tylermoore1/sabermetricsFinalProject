@@ -88,37 +88,55 @@
     </div>
 
     <br />
+    <div class="container-fluid col-md-12" id="idEntirePage">
+      <div id="idBody" style="text-align:center">
+        <script>
+            var graphs = {{plot | safe}};
+            Plotly.plot('idBody',graphs,{});
+        </script>
+      </div>
 
-    <div id="idBody" style="text-align:center">
+      <div class="body container-fluid col-md-10">
+
+        <table class="table table-striped" id="idTeamTable">
+          <thead>
+            <tr>
+              <th scope="col"> Team ID </th>
+              <th scope="col"> Team Name </th>
+              <th scope="col"> Park Factor </th>
+              <th scope="col"> Score Adjusted </th>
+              <th scope="col"> OBP Adjusted </th>
+              <th scope="col"> SLG Adjusted </th>
+              <th scope="col"> Super Score </th>
+            </tr>
+          </thead>
+          <tbody id="idTeamBody">
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="body container-fluid col-md-5" id="idAddTeamGraph" style="margin:auto">
+        <div class="container-fluid col-md-12" id="idButtonSection">
+        </div>
+        <br />
+        <div class="container-fluid col-md-12" id="idGraphSection" style="text-align:center">
+        </div>
+      </div>
     </div>
 
-    <div class="body container-fluid col-md-10">
-
-      <table class="table table-striped" id="idTeamTable">
-        <thead>
-          <tr>
-            <th scope="col"> Team ID </th>
-            <th scope="col"> Team Name </th>
-            <th scope="col"> Park Factor </th>
-            <th scope="col"> Score Adjusted </th>
-            <th scope="col"> OBP Adjusted </th>
-            <th scope="col"> SLG Adjusted </th>
-            <th scope="col"> Super Score </th>
-          </tr>
-        </thead>
-        <tbody id="idTeamBody">
-        </tbody>
-      </table>
-
-    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
   </body>
   <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/transfer.js') }}"></script> -->
   <script type="text/javascript">
+
+    var teamName = '';
 
     $(document).ready(function() {
     });
@@ -132,8 +150,10 @@
     });
 
     $('.filterButtons').click(function() {
-      // $('#idFilterTeamsBox').show();
-      // $('#idSearchTeamBox').hide();
+      //need to get rid of previous graph so they don't overlap each other
+      $('#idButtonSection').html('');
+      $('#idGraphSection').html('');
+      
       var yearID = this.id;
 
       $('#idFindBestTeamsBox').collapse('hide');
@@ -170,6 +190,9 @@
     });
 
     $('#idForm').on('submit', function(e) {
+        //need to get rid of previous graph so they don't overlap each other
+        $('#idButtonSection').html('');
+        $('#idGraphSection').html('');
 
         $('#idSearchTeamBox').collapse('hide');
 
@@ -183,6 +206,7 @@
           },
           dataType: 'json',
           success: function(data) {
+            teamName = $('#idTeamName').val();
             $('#idTeamName').val("");
             $('#idTeamBody').html("");
             if (data == '') {
@@ -205,12 +229,31 @@
                       <td> ' + value.Super_Score.toFixed(3) + '</td> \
                     </tr>');
               });
+
+              $('#idButtonSection').append('<button class="btn btn-primary col-md-4 offset-md-4 type="button" id="idShowGraph" value="Show Graph">Show Graph</button>');
             }
           },
           error: function(request, status, error) {
             $("#idBody").html(error);
           }
         });
+    });
+
+    $('#idEntirePage').on('click', '#idShowGraph', function() {
+
+      $.ajax({
+        url: "/graph",
+        type: "GET",
+        contentType: 'application/json;charset=UTF-8',
+        data: {
+          "teamName": teamName,
+        },
+        dataType:"json",
+        success: function (data) {
+            Plotly.newPlot('idGraphSection', data );
+            $('#idGraphSection').css('background-color','#FBFAF7');
+        }
+      });
     });
   </script>
 </html>
