@@ -148,8 +148,10 @@
 
       $('#idAboutPage').html('');
       $('#idAboutPage').append('<p> The link to get to our video demo can be found here: <a href="https://vimeo.com/333561624"> Video Demo </a> <br />')
-      // $('#idAboutPage').append('<iframe height="100%" width="80%" src="{{ url_for('static', filename='evaluation.pdf', _external=True) }}"></iframe>')
-      $('#idAboutPage').append('<p> The link to get to our write up: <a href="https://github.com/tylermoore1/sabermetricsFinalProject/blob/master/static/evaluation.pdf"> Write Up </a> </p>');
+
+      $('#idAboutPage').append('<p> The pdf of our write up only shows up on some computers for some reason so here is a link of the write up just in case it doesnt work: <a href="https://github.com/tylermoore1/sabermetricsFinalProject/blob/master/static/evaluation.pdf"> Write Up </a> </p>');
+
+      $('#idAboutPage').append('<iframe height="100%" width="80%" src="{{ url_for('static', filename='evaluation.pdf', _external=True) }}"></iframe>')
 
     });
 
